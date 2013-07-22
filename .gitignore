@@ -1,0 +1,6 @@
+# node modules installed locally in the project:
+node_modules
+
+# eclipse specific:
+.project
+.settings

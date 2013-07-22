@@ -1,0 +1,78 @@
+ body {
+   padding-left: 0;
+   padding-right: 0;
+ }
+ #page-wrapper {
+   position: relative;
+   width: 980px;
+   /* centers the document */
+   margin: 0 auto;
+   /*
+  hides anything drawn off canvas.
+  remove overflow and height to see things drawn off canvas.
+  */
+   overflow: hidden;
+   height: 1000px;
+ }
+ /* This makes absolutely positioned elements like p, h1,
+     and some bootstrap elements placed properly. */
+ #absolute-wrapper p, #absolute-wrapper h1, #absolute-wrapper h2, #absolute-wrapper h3, #absolute-wrapper h4, #absolute-wrapper h5, #absolute-wrapper h6 {
+   margin-top: 0 !important;
+ }
+ #absolute-wrapper {
+   position: relative;
+   width: 980px;
+   margin: 0 auto;
+   height: 1px;
+ }
+ #absolute-wrapper .well {
+   width: 942px;
+   position: absolute;
+ }
+ #absolute-wrapper .well.well-1 {
+   height: 90px;
+   top: -2px;
+   left: 0px;
+ }
+ #absolute-wrapper .well.well-1 p {
+   margin: 5px 0px 3px 0px;
+   text-align: center;
+ }
+ #absolute-wrapper .well.well-1 p strong span {
+   color: #17a5d1;
+ }
+ #absolute-wrapper .well.well-1 .heading {
+   text-align: center;
+   margin: 3px 0px 10px 0px;
+ }
+ #absolute-wrapper div.div-1 {
+   position: absolute;
+ }
+ #absolute-wrapper div.div-2 {
+   width: 741px;
+   height: 450px;
+   top: 181px;
+   left: 119px;
+ }
+ #absolute-wrapper .hero-unit.div-1 {
+   padding: 30px 60px 60px 60px;
+   width: 560px;
+   height: 131px;
+   top: 687px;
+   left: 149px;
+ }
+ #absolute-wrapper .hero-unit.div-1 .btns .btn-primary {
+   background: #0088cc;
+   background-image: -moz-linear-gradient(270deg, #0088cc 0%, #0044cc 100%);
+   background-image: -webkit-linear-gradient(270deg, #0088cc 0%, #0044cc 100%);
+   background-image: -o-linear-gradient(270deg, #0088cc 0%, #0044cc 100%);
+   background-image: linear-gradient(180deg, #0088cc 0%, #0044cc 100%);
+ }
+ #absolute-wrapper .well.well-2 {
+   height: 14px;
+   top: 945px;
+   left: -2px;
+ }
+ #absolute-wrapper .well.well-2 p {
+   text-align: center;
+ }
