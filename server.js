@@ -1,16 +1,22 @@
+// configuration to move out 
+var filesPort=1337;
+var websocketPort=1338;
+
 // set up and start a websocket server-side
-var io = require('socket.io').listen(1338);
+var io = require('socket.io').listen(websocketPort);
 
 io.sockets.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function (data) {
-    console.log(data);
+	console.log('Client websocket connection opened'); //TODO: add ip and similar details of the client/connection, especially agent type etc.
+	
+	// websocket sanity test
+	socket.emit('serverSanity', { hello: 'hello client' });
+	socket.on('clientSanity', function (data) {
+		console.log(data);
   });
 });
 
 
 // set up and start a static file server, for serving the static page
-var filesPort=1337;
 var app = require('http').createServer(handler);
 var static = require('node-static'); 
 staticContentServer = new static.Server('./page', { cache: false });
