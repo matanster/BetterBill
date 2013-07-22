@@ -13,6 +13,7 @@
     <link href="stylesheets/betterbill.css" media="screen" rel="stylesheet" type="text/css" />
     <!-- Typekit fonts require an account and a kit containing the fonts used. see https://typekit.com/plans for details. <script type="text/javascript" src="//use.typekit.net/YOUR_KIT_ID.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script -->
+	<script src="http://d3js.org/d3.v3.min.js"></script>    
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
 -->
     <title>BetterBill</title>
@@ -27,34 +28,77 @@
           </p>
           <h1 class="heading">Finding the best plan for you</h1>
         </div>
-        <div class="div-1 div-2"></div>
-        <div class="hero-unit div-1">
-          <h1 class="heading">BetterBill</h1>
-          <p>&nbsp;Empowing&nbsp;consumers to get the best communication plan for them</p>
-          <div class="btns">
-            <a href="#" class="btn btn-primary btn-large">Learn More</a>
-          </div>
+        <div class="div-1 div-2">
+        	<svg width="741" height="450"></svg>
+        </div>
+	      <div class="hero-unit div-1">
+	      <h1 class="heading">BetterBill</h1>
+	      <p>&nbsp;Empowing&nbsp;consumers to get the best communication plan for them</p>
+	      <div class="btns">
+	        <a href="#" class="btn btn-primary btn-large">Learn More</a>
+	      </div>
         </div>
         <div class="well well-2">
-          <p>Copyright 2013 BetterBill
-            <br>&nbsp;
-            <br>API
-            <br>&nbsp;
-            <br>Training
-            <br>&nbsp;
-            <br>Shop
-            <br>&nbsp;
-            <br>Blog
-            <br>&nbsp;
-            <br>About</p>
-          <p>©</p>
-          <p>Copyright 2013 BetterBill</p>
+          <p>© Copyright 2013 BetterBill</p>
         </div>
       </div>
     </div>
   </body>
   <script>
-	  var socket = io.connect('http://localhost:1338');
+  
+	  var points = [
+		  [480, 100],
+		  [580, 300],
+		  [600, 100],
+		  [640, 300],
+		  [180, 300],
+		  [280, 100],
+		  [380, 300]
+		];
+		
+	  var svg = d3.select("svg");
+	
+	  var path = svg.append("path")
+	    .data([points])
+	    .attr("d", d3.svg.line()
+	    .tension(0) // Catmull–Rom
+	    .interpolate("cardinal-closed"));
+
+	  var pathLen = path.node().getTotalLength();
+	  
+	  var Logos = 10;
+	  
+	  var firstLogo = path.node().getPointAtLength(pathLen/(Logos-1));
+	  
+	  var image = svg.append("svg:image")
+	  				 .attr("xlink:href", "logos/T-Mobile-70x65.jpg")  //"https://github.com/favicon.ico") //s"@Url.Content("page/logos/T-Mobile-70x65.jpg")")
+	  				 .attr("x", firstLogo.x)
+        			 .attr("y", firstLogo.y)
+         			 .attr("width", "20")
+        			 .attr("height", "20");
+
+		function transition() {
+		  image.transition()
+		      .duration(10000)
+		      .attrTween("transform", translateAlong(path.node()))
+		      .each("end", transition);
+		}
+		
+		// Returns an attrTween for translating along the specified path element.
+		function translateAlong(path) {
+		  return function(d, i, a) {
+		    return function(t) {
+		      var p = path.getPointAtLength(t * pathLen);
+		      console.log(p.x + " " + p.y);
+		      return "translate(" + p.x + "," + p.y + ")";
+		    };
+		  };
+		};
+
+	  transition();
+	  console.log(firstLogo);
+	  
+  	  var socket = io.connect('http://localhost:1338');
 	  	  
 	  // websocket sanity test
 	  socket.on('serverSanity', function (data) {
