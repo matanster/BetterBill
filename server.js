@@ -12,6 +12,8 @@ io.sockets.on('connection', function (socket) {
 	socket.emit('serverSanity', { hello: 'hello client' });
 	socket.on('clientSanity', function (data) {
 		console.log(data);
+		
+	
   });
 });
 
