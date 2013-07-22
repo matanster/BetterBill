@@ -9,10 +9,11 @@
     <link href="stylesheets/bootstrap-responsive.css" media="screen" rel="stylesheet" type="text/css" />
     <link href="stylesheets/common.css" media="screen" rel="stylesheet" type="text/css" />
     <link href="stylesheets/fontawesome.css" media="screen" rel="stylesheet" type="text/css" />
-    <link href="stylesheets/project.css" media="screen" rel="stylesheet" type="text/css" />
+    <!-- link href="stylesheets/project.css" media="screen" rel="stylesheet" type="text/css" / -->
     <link href="stylesheets/betterbill.css" media="screen" rel="stylesheet" type="text/css" />
     <!-- Typekit fonts require an account and a kit containing the fonts used. see https://typekit.com/plans for details. <script type="text/javascript" src="//use.typekit.net/YOUR_KIT_ID.js"></script>
-  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script -->
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
 -->
     <title>BetterBill</title>
   </head>
@@ -52,5 +53,12 @@
       </div>
     </div>
   </body>
-
+  <script>
+  var socket = io.connect('http://localhost:1338');
+  socket.on('news', function (data) {
+    console.log(data);
+    socket.emit('my other event', { my: 'data' });
+  });
+  </script>
+  
 </html>
