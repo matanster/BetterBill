@@ -12,3 +12,8 @@ sudo npm install socket.io
 
 Created with [Nodeclipse v0.4](https://github.com/Nodeclipse/nodeclipse-1)
  ([Eclipse Marketplace](http://marketplace.eclipse.org/content/nodeclipse), [site](http://www.nodeclipse.org))   
+
+## Warning
+
+This is ugly POC driven code.
+Swiftly tested on latest Chrome and Firefox.
