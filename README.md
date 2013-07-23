@@ -1,10 +1,13 @@
-# this is a work-in-progress repo
+# This is a work-in-progress repo
 
 ## Installation (not tested)
 
-Install node.js
+Install node.js (0.10.13 will do)
+
 Unzip the repo and locate to it
+
 sudo npm install node-static
+
 sudo npm install socket.io
 
 Created with [Nodeclipse v0.4](https://github.com/Nodeclipse/nodeclipse-1)
