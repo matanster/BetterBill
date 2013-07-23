@@ -46,7 +46,7 @@
   </body>
   <script>
   
-	  var points = [
+	  var route1 = [
 		  [480, 100],
 		  [580, 300],
 		  [600, 100],
@@ -56,10 +56,15 @@
 		  [380, 300]
 		];
 		
+	  var route2 = [ // TODO: fully parameterize this
+	  	  [10,		100],
+	  	  [741-10,  450-100]
+	  	]
+		
 	  var svg = d3.select("svg");
 	
 	  var path = svg.append("path")
-	    .data([points])
+	    .data([route1])
 	    .attr("d", d3.svg.line()
 	    .tension(0) // Catmull–Rom
 	    .interpolate("cardinal-closed"));
@@ -82,7 +87,12 @@
 	  			 "logos/Vodafone-70x65.jpg"	  			 	  			 	  			 	  			 	  			 	  			 	  			 	  			 	  			 	  			 	  			 
 	  			 ] 
 	  
+	  var sizes =  [3, 3, 3, 3, 3, 5, 3, 3, 3, 3];
+	  var bias = [3, 3, 3, 3, 1, 1, 1, 8, 1, 8]; 
+	  				  
 	  var image = new Array();
+	  
+	  var renderedUpdates = 0;
 	  
 	  for (index in logos)
 	  {
@@ -92,32 +102,47 @@
 	  				      .attr("xlink:href", logos[index])  //"https://github.com/favicon.ico") //s"@Url.Content("page/logos/T-Mobile-70x65.jpg")")
 	  				  	  .attr("width", "20")
         			 	  .attr("height", "20")
-					 	  .attr("transform", "translate(" + logoTranslation.x + "," + logoTranslation.y + ") " + "scale(3)");        			 
+					 	  .attr("transform", "translate(" + logoTranslation.x + "," + logoTranslation.y + ") " + "scale(4)");        			 
 	  }
 
 	  	  
 	  function moveLogo(index) {
 		  image[index].transition()
-		      .duration(10000)
+		      .duration(13000)
 		      .attrTween("transform", translateAlong(path.node(), index))
 		}
 		
-		function resizeLogo() {
-		  image.transition()
-		      .duration(1000)
-		      .attr("transform", "scale(4)")
-		}
-		
-		for (index in logos)
-	  		{ moveLogo(index); }	
+	  // final animation		
+	  setTimeout(function(){ 
+	  		console.log("Updates rendered: " + renderedUpdates);
+			for (index in logos) // TODO: confirm it's ok to reuse 'index' and this syntax is standard
+	  		{
+	  			if (sizes[index] < 10)
+	  			{
+	  				image[index].style("opacity", 1).transition().duration(2000).style("opacity", 0);
+	  			}
+	  			else
+	  			{
+					//image[index].style("opacity", 1).transition().duration(2000).style("opacity", 0);	  				
+	  			} 
+	  		}		  		 
+	  	},
+	  	13000);
+	  			
+	  for (index in logos)
+	  	{ moveLogo(index); }	
+	  		
+	  	// TODO: add d3 wait for the regular transition to end here
+	  	
 		
 		// Returns an attrTween for translating along the specified path element.
+		// Can be optimized a bit for less repeat calculations
 		function translateAlong(path, index) {
 		  //logoInitialTranslation = path.node().getPointAtLength(pathLen/(Logos+1)*index); 		
 		  return function(d, i, a) {
 		    return function(t) {
 		      var p = path.getPointAtLength(((t+(1/(Logos+1)*index)) * pathLen) % pathLen);
-		      return "translate(" + p.x + "," + p.y + ")" + "scale(4)";
+		      return "translate(" + p.x + "," + p.y + ")" + "scale(" + sizes[index] + ")";
 		    };
 		  };
 		};
@@ -135,11 +160,21 @@
 	  
   	  var socket = io.connect('http://localhost:1338');
 	  	  
-	  // websocket sanity test
+	  // websocket sanity test - can be replaced by just checking the connection is fine more elegantly
 	  socket.on('serverSanity', function (data) {
 	    console.log(data);
 	    socket.emit('clientSanity', { clientResponse: 'hello back from client' });
 	  });
+	  
+	  socket.on('operatorUpdate', function (data) {
+	    //console.log('operatorUpdate: ' + data);
+	    var operator = data.operator; // add thorough input verification 
+	    var size = data.size;  		  // add thorough input verification
+	    //console.log(data, operator, size);
+	    sizes[operator] += (size * bias[operator]/3);
+	    renderedUpdates++; 
+	  });
+	  
   </script>
   
 </html>

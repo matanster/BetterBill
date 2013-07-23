@@ -6,15 +6,31 @@ var websocketPort=1338;
 var io = require('socket.io').listen(websocketPort);
 
 io.sockets.on('connection', function (socket) {
+	
+	function sendUpdate(){
+		socket.emit('operatorUpdate', { operator: Math.floor(Math.random()*10),
+		    size: Math.random()*1 });
+	}
+	
+	function simulateBackEndStream(){
+		for (var i=0; i<100; i++)
+		{
+			var nextWait = Math.random()*1000*12;
+			setTimeout(sendUpdate, nextWait);
+			//console.log(nextWait);
+		}
+	}
+		
+	
 	console.log('Client websocket connection opened'); //TODO: add ip and similar details of the client/connection, especially agent type etc.
 	
 	// websocket sanity test
 	socket.emit('serverSanity', { hello: 'hello client' });
 	socket.on('clientSanity', function (data) {
 		console.log(data);
+		setTimeout(simulateBackEndStream, 5000) // initial quiet period
+	});
 		
-	
-  });
 });
 
 
