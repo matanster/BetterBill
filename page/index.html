@@ -50,8 +50,8 @@
 		  [480, 100],
 		  [580, 300],
 		  [600, 100],
-		  [640, 300],
-		  [180, 300],
+		  [500, 300],
+		  [50, 300],
 		  [280, 100],
 		  [380, 300]
 		];
@@ -70,32 +70,66 @@
 	  
 	  var firstLogo = path.node().getPointAtLength(pathLen/(Logos-1));
 	  
-	  var image = svg.append("svg:image")
-	  				 .attr("xlink:href", "logos/T-Mobile-70x65.jpg")  //"https://github.com/favicon.ico") //s"@Url.Content("page/logos/T-Mobile-70x65.jpg")")
-	  				 .attr("x", firstLogo.x)
-        			 .attr("y", firstLogo.y)
-         			 .attr("width", "20")
-        			 .attr("height", "20");
-
-		function transition() {
+	  var logos=["logos/EE-70x65.jpg",
+	  			 "logos/images.jpg",
+	  			 "logos/Lebara square.png",
+	  			 "logos/O2-70x65.jpg",
+	  			 "logos/Orange-70x65.jpg",
+	  			 "logos/tesco_mobile_logo.gif",
+	  			 "logos/Three-70x65.jpg",
+	  			 "logos/T-Mobile-70x65.jpg",
+	  			 "logos/Virgin-70x65.jpg",
+	  			 "logos/Vodafone-70x65.jpg"	  			 	  			 	  			 	  			 	  			 	  			 	  			 	  			 	  			 	  			 	  			 
+	  			 ] 
+	  
+	  var image = new Array();
+	  
+	  for (index in logos)
+	  {
+		console.log(logos[index]);
+		logoTranslation = path.node().getPointAtLength(pathLen/(Logos+1)*index); // can optimize to calc the beginning just once, negligible
+		image[index] = svg.append("svg:image")
+	  				      .attr("xlink:href", logos[index])  //"https://github.com/favicon.ico") //s"@Url.Content("page/logos/T-Mobile-70x65.jpg")")
+	  				  	  .attr("width", "20")
+        			 	  .attr("height", "20")
+					 	  .attr("transform", "translate(" + logoTranslation.x + "," + logoTranslation.y + ") " + "scale(3)");        			 
+	  }
+	  
+		function moveLogo() {
 		  image.transition()
 		      .duration(10000)
 		      .attrTween("transform", translateAlong(path.node()))
-		      .each("end", transition);
 		}
+		
+		function resizeLogo() {
+		  image.transition()
+		      .duration(1000)
+		      .attr("transform", "scale(4)")
+		}
+		
+		// Returns an attrTween for translating along the specified path element.
+		function resize() {
+		  return function(d, i, a) {
+		    return function(t) {
+		      return "scale(" + p.x + "," + p.y + ")";
+		    };
+		  };
+		};
+		
+		resizeLogo();
+		moveLogo();	
 		
 		// Returns an attrTween for translating along the specified path element.
 		function translateAlong(path) {
 		  return function(d, i, a) {
 		    return function(t) {
 		      var p = path.getPointAtLength(t * pathLen);
-		      console.log(p.x + " " + p.y);
-		      return "translate(" + p.x + "," + p.y + ")";
+		      //console.log(p.x + " " + p.y);
+		      return "translate(" + p.x + "," + p.y + ")" + "scale(4)";
 		    };
 		  };
 		};
-
-	  transition();
+	  
 	  console.log(firstLogo);
 	  
   	  var socket = io.connect('http://localhost:1338');

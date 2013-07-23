@@ -76,3 +76,8 @@
  #absolute-wrapper .well.well-2 p {
    text-align: center;
  }
+
+ path {
+   fill: none;
+   stroke: #000;
+ }
