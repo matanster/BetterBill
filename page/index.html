@@ -94,11 +94,12 @@
         			 	  .attr("height", "20")
 					 	  .attr("transform", "translate(" + logoTranslation.x + "," + logoTranslation.y + ") " + "scale(3)");        			 
 	  }
-	  
-		function moveLogo() {
-		  image.transition()
+
+	  	  
+	  function moveLogo(index) {
+		  image[index].transition()
 		      .duration(10000)
-		      .attrTween("transform", translateAlong(path.node()))
+		      .attrTween("transform", translateAlong(path.node(), index))
 		}
 		
 		function resizeLogo() {
@@ -107,6 +108,20 @@
 		      .attr("transform", "scale(4)")
 		}
 		
+		for (index in logos)
+	  		{ moveLogo(index); }	
+		
+		// Returns an attrTween for translating along the specified path element.
+		function translateAlong(path, index) {
+		  //logoInitialTranslation = path.node().getPointAtLength(pathLen/(Logos+1)*index); 		
+		  return function(d, i, a) {
+		    return function(t) {
+		      var p = path.getPointAtLength(((t+(1/(Logos+1)*index)) * pathLen) % pathLen);
+		      return "translate(" + p.x + "," + p.y + ")" + "scale(4)";
+		    };
+		  };
+		};
+
 		// Returns an attrTween for translating along the specified path element.
 		function resize() {
 		  return function(d, i, a) {
@@ -116,21 +131,7 @@
 		  };
 		};
 		
-		resizeLogo();
-		moveLogo();	
-		
-		// Returns an attrTween for translating along the specified path element.
-		function translateAlong(path) {
-		  return function(d, i, a) {
-		    return function(t) {
-		      var p = path.getPointAtLength(t * pathLen);
-		      //console.log(p.x + " " + p.y);
-		      return "translate(" + p.x + "," + p.y + ")" + "scale(4)";
-		    };
-		  };
-		};
-	  
-	  console.log(firstLogo);
+		//resizeLogo();
 	  
   	  var socket = io.connect('http://localhost:1338');
 	  	  
